@@ -5,7 +5,7 @@ const CustomTodo = () => {
   // NOTE: Some of the possible options that you can check and render JSX based on. They can be auto-suggested by the linter. You can also use destructuring and get/see them.
   const todoIdsQuery = useTodosIds()
   const customTodoData = useCustomTodos(todoIdsQuery.data)
-  console.log("customTodoData", customTodoData);
+  console.log("customTodoData", customTodoData)
 
   // NOTE: this gives us the number of queries being ran at the time. Good for tracking performance and debugging
   const isFetching = useIsFetching()
