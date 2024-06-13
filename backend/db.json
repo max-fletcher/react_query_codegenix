@@ -1,107 +1,22 @@
 {
   "todos": [
     {
-      "checked": true,
       "title": "title6",
       "description": "desc6",
-      "id": 6
+      "id": 6,
+      "checked": true
     },
     {
-      "checked": true,
       "title": "title7",
       "description": "desc7",
-      "id": 7
+      "id": 7,
+      "checked": true
     },
     {
-      "checked": true,
       "title": "title8",
       "description": "desc8",
-      "id": 8
-    },
-    {
-      "title": "test",
-      "description": "test",
-      "id": 9,
-      "checked": true
-    },
-    {
-      "title": "test",
-      "description": "",
-      "id": 10,
-      "checked": true
-    },
-    {
-      "title": "test",
-      "description": "test",
-      "id": 11,
-      "checked": true
-    },
-    {
-      "title": "test",
-      "description": "test",
-      "id": 12,
-      "checked": true
-    },
-    {
-      "title": "test",
-      "description": "test",
-      "id": 13,
-      "checked": true
-    },
-    {
-      "title": "test",
-      "description": "test",
-      "id": 14
-    },
-    {
-      "title": "test",
-      "description": "test",
-      "id": 15
-    },
-    {
-      "title": "new todo",
-      "description": "new todo",
-      "id": 16
-    },
-    {
-      "title": "new todo",
-      "description": "new todo",
-      "id": 17
-    },
-    {
-      "title": "new todo",
-      "description": "new todo",
-      "id": 18
-    },
-    {
-      "title": "new todo",
-      "description": "new todo",
-      "id": 19
-    },
-    {
-      "title": "new todo",
-      "description": "new todo",
-      "id": 20
-    },
-    {
-      "title": "todo 1",
-      "description": "todo 1",
-      "id": 21
-    },
-    {
-      "title": "Todo 2",
-      "description": "Todo 2",
-      "id": 22
-    },
-    {
-      "title": "Todo 3",
-      "description": "Todo 3",
-      "id": 23
-    },
-    {
-      "title": "Todo 4",
-      "description": "Todo 4",
-      "id": 24
+      "id": 8,
+      "checked": false
     }
   ],
   "projects": [
