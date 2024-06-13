@@ -31,7 +31,7 @@ export function useCustomTodos(ids: (number | undefined)[] | undefined) { // We 
     // NOTE: we are using "(ids ?? [])"(null coalesceing) and "id!"(meaning never null/undefined in typescript) to get rid of a typescript error
     queries: (ids ?? []).map((id) => {
       return {
-        queryKey: ["todo", id],
+        queryKey: ["custom_todos", id],
         queryFn: () => getTodo(id!)
       }
     }),
