@@ -1,9 +1,8 @@
 import { useIsFetching } from "@tanstack/react-query"
 import { useCustomTodos, useTodosIds } from "../services/queries"
-import { useCreateTodo, useUpdateTodo } from "../services/mutations"
+import { useCreateTodo, useDeleteTodo, useUpdateTodo } from "../services/mutations"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Todo } from "../types/todo"
-import { useEffect } from "react"
 
 const CustomTodo = () => {
   // NOTE: Some of the possible options that you can check and render JSX based on. They can be auto-suggested by the linter. You can also use destructuring and get/see them.
@@ -15,20 +14,38 @@ const CustomTodo = () => {
   // NOTE: Comes from react-hook-form
   const {register, handleSubmit} = useForm<Todo>()
 
-  // NOTE: Import mutation that is used to enter create data
-  const createTodoMutation = useCreateTodo()
-  // NOTE: function that will be ran when submit button is clicked
-  const handleCreateTodoSubmit: SubmitHandler<Todo> = (data) => {
-    createTodoMutation.mutate(data)
+  // NOTE: Import mutation
+  const createTodoMutation = useCreateTodo() // is used to enter create data
+  const updateTodoMutation = useUpdateTodo() // is used to enter update data
+  const deleteTodoMutation = useDeleteTodo() // is used to enter delete data
+
+  // NOTE: function that will be ran when submit button is clicked. Also it is highly recommended that you use an "await deleteTodoMutation.mutateAsync(id)" along with async before
+  // the function else any additional logic here might not run in the correct order. The order of "before create", "after create" and "Mutate Create" console.logs should attest to this fact.
+  const handleCreateTodoSubmit: SubmitHandler<Todo> = async (data) => {
+    console.log('before create');
+      // updateTodoMutation.mutate({...data, checked:true})
+      await createTodoMutation.mutateAsync(data)
+      console.log('after create');
   }
-  
-  // NOTE: Import mutation that is used to enter update data
-  const updateTodoMutation = useUpdateTodo()
-  // NOTE: function that will be ran checked checkbox is clicked
-  const handleMarkAsDoneSubmit = (data: Todo | undefined) => {
+
+  // NOTE: function that will be ran when "checked" checkbox is clicked. Also it is highly recommended that you use an "await deleteTodoMutation.mutateAsync(id)" along with async before
+  // the function else any additional logic here might not run in the correct order. The order of "before update", "after update" and "Mutate Update" console.logs should attest to this fact.
+  const handleMarkAsDoneSubmit = async (data: Todo | undefined) => {
     if(data){
-      updateTodoMutation.mutate({...data, checked:true})
+      console.log('before update');
+      // updateTodoMutation.mutate({...data, checked:true})
+      await updateTodoMutation.mutateAsync({...data, checked:true})
+      console.log('after update');
     }
+  }
+
+  0// NOTE: function that will be ran when delete is clicked. Also it is highly recommended that you use an "await deleteTodoMutation.mutateAsync(id)" along with async before
+  // the function else any additional logic here might not run in the correct order. The order of "before delete", "after delete" and "Mutate Delete" console.logs should attest to this fact.
+  const handleDeleteTodo = async (id: number) => {
+      console.log('before delete');
+      // deleteTodoMutation.mutate(id)
+      await deleteTodoMutation.mutateAsync(id)
+      console.log('after delete');
   }
 
   // NOTE: this gives us the number of queries being ran at the time. Good for tracking performance and debugging
@@ -66,6 +83,9 @@ const CustomTodo = () => {
                   <button onClick={() => handleMarkAsDoneSubmit(data)} disabled={data?.checked}>
                     {data?.checked ? "Done" : "Mark as done"}
                   </button>
+                  {data && data.id && (
+                    <button onClick={() => handleDeleteTodo(data.id!)}>Delete</button>
+                  )}
                 </div>
               </li>
             )

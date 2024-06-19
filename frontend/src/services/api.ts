@@ -35,3 +35,9 @@ export const updateTodo = async (data: Todo) => {
   // NOTE: will fetch data from "http://localhost:8080/todos" since BASE_URL is defined above
   await axiosInstance.put<Todo>(`todos/${data.id}`, data)
 }
+
+// NOTE: We will use this for mutation. This is to update an item to the database/list.
+export const deleteTodo = async (id: number) => {
+  // NOTE: will fetch data from "http://localhost:8080/todos" since BASE_URL is defined above
+  await axiosInstance.delete<Todo>(`todos/${id}`)
+}
