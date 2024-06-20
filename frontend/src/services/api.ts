@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Todo } from "../types/todo"
+import { Project } from "../types/projects";
 
 const BASE_URL = "http://localhost:8080"
 const axiosInstance = axios.create({baseURL:BASE_URL})
@@ -36,8 +37,14 @@ export const updateTodo = async (data: Todo) => {
   await axiosInstance.put<Todo>(`todos/${data.id}`, data)
 }
 
-// NOTE: We will use this for mutation. This is to update an item to the database/list.
+// NOTE: We will use this for mutation. This is to delete an item to the database/list.
 export const deleteTodo = async (id: number) => {
   // NOTE: will fetch data from "http://localhost:8080/todos" since BASE_URL is defined above
   await axiosInstance.delete<Todo>(`todos/${id}`)
+}
+
+export const getPaginatedProjects = async (page = 1) => {
+  // NOTE: will fetch data from "http://localhost:8080/todos" since BASE_URL is defined above
+  // Also, the underscores are needed as because that is the syntax that json-server follows when dishing out paginated data
+  return (await axiosInstance.get<Project[]>(`projects?_page=${page}&_limit=3`)).data
 }

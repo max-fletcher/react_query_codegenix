@@ -1,10 +1,16 @@
 import AllTodos from "./components/AllTodos"
 import CustomTodo from "./components/CustomTodo"
+import Projects from "./components/Projects"
 import Todo from "./components/Todo"
 
 const App = () => {
   return (
     <>
+      <div>
+        Paginated Todos:
+        <Projects />
+      </div>
+      <hr />
       <div>
         Custom Todos:
         <CustomTodo />
