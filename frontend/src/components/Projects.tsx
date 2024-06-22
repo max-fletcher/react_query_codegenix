@@ -3,9 +3,10 @@ import { useProjects } from "../services/queries"
 
 const Projects = () => {
   const [page, setPage] = useState(1) // for pagination
+  const [limit, setLimit] = useState(5) // for pagination
 
   // NOTE: "isPlaceholderData" is when we need to use old data as placeholder
-  const {data, isPending, error, isError, isPlaceholderData, isFetching} = useProjects(page)
+  const {data, isPending, error, isError, isPlaceholderData, isFetching} = useProjects(page, limit)
 
   return (
     <>
@@ -33,7 +34,7 @@ const Projects = () => {
         Previous Page
       </button>
 
-      <span>Current page: {page}</span>
+      <span style={{"padding-left" : "10px", "padding-right" : "10px"}}>Current page: {page}</span>
 
       {/* NOTE: The button only works if "isPlaceHolderData" is false as per "onClick" logic and "disabled" logic */}
       <button 
@@ -47,7 +48,39 @@ const Projects = () => {
       >
         Next Page
       </button>
+      <br />
+      {/* NOTE: A manual loader */}
       {isFetching ? <span>Loading...</span> : null}
+      <br />
+
+      <span style={{"padding-right" : "10px"}}>Results per page:</span>
+      <button 
+        onClick={() =>{
+          if(!isPlaceholderData)
+          setLimit(3)
+        }}
+        disabled={isPlaceholderData}
+      >
+        3
+      </button>
+      <button 
+        onClick={() =>{
+          if(!isPlaceholderData)
+          setLimit(5)
+        }}
+        disabled={isPlaceholderData}
+      >
+        5
+      </button>
+      <button 
+        onClick={() =>{
+          if(!isPlaceholderData)
+          setLimit(10)
+        }}
+        disabled={isPlaceholderData}
+      >
+        10
+      </button>
       </div>
     </>
   )

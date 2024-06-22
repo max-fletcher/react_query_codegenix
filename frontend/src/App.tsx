@@ -1,5 +1,6 @@
 import AllTodos from "./components/AllTodos"
 import CustomTodo from "./components/CustomTodo"
+import Products from "./components/Products"
 import Projects from "./components/Projects"
 import Todo from "./components/Todo"
 
@@ -7,7 +8,12 @@ const App = () => {
   return (
     <>
       <div>
-        Paginated Todos:
+        Paginated Products:
+        <Products />
+      </div>
+      <hr />
+      <div>
+        Paginated Projects:
         <Projects />
       </div>
       <hr />
