@@ -34,7 +34,7 @@ const Projects = () => {
         Previous Page
       </button>
 
-      <span style={{"padding-left" : "10px", "padding-right" : "10px"}}>Current page: {page}</span>
+      <span style={{ padding: 20 }}>Current page: {page}</span>
 
       {/* NOTE: The button only works if "isPlaceHolderData" is false as per "onClick" logic and "disabled" logic */}
       <button 
@@ -53,7 +53,7 @@ const Projects = () => {
       {isFetching ? <span>Loading...</span> : null}
       <br />
 
-      <span style={{"padding-right" : "10px"}}>Results per page:</span>
+      <span style={{padding : "10px", paddingLeft: "0px" }}>Results per page:</span>
       <button 
         onClick={() =>{
           if(!isPlaceholderData)

@@ -59,9 +59,7 @@ export function useProducts() { // We can pass params here and use them to set "
   // getNextPageParam, getPreviousPageParam, to make it work properly.
   return useInfiniteQuery({
     queryKey: ['products'],
-    // IMP NOTE: Look carefully at the function provided to queryFn. This syntax is used when we are passing arguments(e.g query string params or otherwise)to the api call
-    // function(i.e in this case "getPaginatedProjects")
-    queryFn: () => getInfiniteScrollProducts,
+    queryFn: getInfiniteScrollProducts,
     initialPageParam: 0,
     getNextPageParam: (lastPage, _, lastPageParam) => {
       if(lastPage.length === 0){
@@ -82,6 +80,6 @@ export function useProducts() { // We can pass params here and use them to set "
   })
 }
 
-export function useProduct(id: number | null) { // We can pass params here and use them to set "useQuery" options below.
+// export function useProduct(id: number | null) { // We can pass params here and use them to set "useQuery" options below.
 
-}
+// }

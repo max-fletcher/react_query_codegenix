@@ -1,6 +1,5 @@
-import { Fragment } from "react/jsx-runtime"
 import { useProducts } from "../services/queries"
-import { useState } from "react"
+import { Fragment, useState } from "react"
 
 const Products = () => {
 
@@ -12,21 +11,18 @@ const Products = () => {
     <>
       <div>Infinite Scroll Products</div>
       {/* NOTE: "useInfiniteQuery" returns a grouped array hence the double map function. */}
-      {productsQuery.data?.pages.map((group, index) => {
-        console.log("Grou Man", group);
-        <Fragment key={index}>
-        {group.map((product) => (
-          <Fragment key={product.id}>
-            <button 
-              onClick={() => setSelectedProductId(product.id)}
-            >
-              {product.name}
-            </button>
-            <br />
+      {productsQuery.data?.pages.map((group, i) => (
+        <Fragment key={i}>
+          {group.map((product) => (
+            <Fragment key={product.id}>
+              <button onClick={() => setSelectedProductId(product.id)}>
+                {product.name}
+              </button>
+              <br />
             </Fragment>
-        ))}
+          ))}
         </Fragment>
-      })}
+      ))}
       <br />
       <div>
         <button 
