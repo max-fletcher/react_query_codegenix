@@ -1,5 +1,6 @@
-import { keepPreviousData, useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
-import { getInfiniteScrollProducts, getPaginatedProjects, getTodo, getTodos, getTodosIds } from "./api";
+import { keepPreviousData, useInfiniteQuery, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getInfiniteScrollProducts, getPaginatedProjects, getSingleProduct, getTodo, getTodos, getTodosIds } from "./api";
+import { Product } from "../types/products";
 
 // NOTE: These functions are used to cache any API responses that we make(using axios calls from "api.ts") and return data from said cache when needed.
 // These function do not need types as the react-query package is intelligent enough to know what these may return.
@@ -55,8 +56,8 @@ export function useProjects(page: number, limit: number) { // We can pass params
 }
 
 export function useProducts() { // We can pass params here and use them to set "useQuery" options below.
-  // NOTE: We are using "useInfiniteQuery" here so that we can implement infinite scrolling. Also note that we are using some additional options here i.e initialPageParam, 
-  // getNextPageParam, getPreviousPageParam, to make it work properly.
+  // NOTE: We are using "useInfiniteQuery" here so that we can implement infinite scrolling. It is provided by "tanstack-query" by default. Also note that we are using some additional options here
+  // i.e initialPageParam, getNextPageParam, getPreviousPageParam, to make it work properly.
   return useInfiniteQuery({
     queryKey: ['products'],
     queryFn: getInfiniteScrollProducts,
@@ -73,13 +74,29 @@ export function useProducts() { // We can pass params here and use them to set "
       }
       return firstPageParam - 1
     }
-
     // refetchOnWindowFocus: false, // This is an option that causes fresh data to be fetched when we click to visit another tab or click to visit another application away from the browser. Default is true.
     // retry: 3, // This is an option that defines how many times to retry before throwing error. Default is 5.
     // refetchInterval: 20000, // This is an option that defines how long to wait before refetch/retry is ran again if retry fails every time(i.e if retry = 3 and fails all 3 times, it will wait this much time before refetch/retry is ran again).
   })
 }
 
-// export function useProduct(id: number | null) { // We can pass params here and use them to set "useQuery" options below.
+export function useSingleProduct(id: number | null) { // We can pass params here and use them to set "useQuery" options below.
+  const queryClient = useQueryClient()
 
-// }
+  return useQuery({
+    queryKey: ["product", { id }],
+    queryFn: () => getSingleProduct(id!),
+    enabled: !!id, // this is to ensure that this query runs only if id has a value/is defined, else, this query will not run at all
+    // NOTE: This is for optimization purposes. If the product with give ID is already in products cache, then we show it as placeholder data, making showing it a lot faster. This also demonstrates that
+    // we can access cache data using queryClient.getQueryData inside another query/mutation.
+    placeholderData: () => { 
+      // NOTE: Get Products from cache and flatten/convert it to 1D array(remember that in order to use infinite scrolling, we were using "useInfiniteQuery" that groups up fetched data(i.e a 2D array))
+      const cachedProducts = (queryClient.getQueryData(["products"]) as { pages: Product[] | undefined })?.pages?.flat(2)
+
+      // NOTE: Find and return product if it is in cache.
+      if(cachedProducts){
+        return cachedProducts.find((item) => item.id === id)
+      }
+    }
+  })
+}
