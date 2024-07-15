@@ -3,16 +3,38 @@ import { useCustomTodos, useTodosIds } from "../services/queries"
 import { useCreateTodo, useDeleteTodo, useUpdateTodo } from "../services/mutations"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Todo } from "../types/todo"
+import { useState } from "react"
 
 const CustomTodo = () => {
+
+  interface submitData{
+    checked: boolean,
+    title: string,
+    description: string,
+    id?: number
+    editing?: boolean
+  }
+
+  const [editing, setEditing] = useState<boolean>(false)
+
+  const startEditing = (data: submitData) => {
+    console.log(data)
+    setEditing(true)
+    reset(data)
+  }
+
   // NOTE: Some of the possible options that you can check and render JSX based on. They can be auto-suggested by the linter. You can also use destructuring and get/see them.
   const todoIdsQuery = useTodosIds()
-  console.log("todoIdsQuery.data", todoIdsQuery.data);
+  console.log("todoIdsQuery.data", todoIdsQuery.data)
   const customTodoData = useCustomTodos(todoIdsQuery.data)
   console.log("customTodoData", customTodoData)
 
   // NOTE: Comes from react-hook-form
-  const {register, handleSubmit} = useForm<Todo>()
+  const {
+    register, 
+    handleSubmit, 
+    reset,
+  } = useForm<Todo>()
 
   // NOTE: Import mutation
   const createTodoMutation = useCreateTodo() // is used to enter create data
@@ -21,25 +43,35 @@ const CustomTodo = () => {
 
   // NOTE: function that will be ran when submit button is clicked. Also it is highly recommended that you use an "await deleteTodoMutation.mutateAsync(id)" along with async before
   // the function else any additional logic here might not run in the correct order. The order of "before create", "after create" and "Mutate Create" console.logs should attest to this fact.
-  const handleCreateTodoSubmit: SubmitHandler<Todo> = async (data) => {
-    console.log('before create');
+  const handleCreateTodoSubmit: SubmitHandler<submitData> = async (data) => {
+    console.log(data.editing);
+    if(data.editing){
+      delete data.editing
+      console.log('before update');
       // updateTodoMutation.mutate({...data, checked:true})
-      await createTodoMutation.mutateAsync(data)
+      await updateTodoMutation.mutateAsync(data)
+      console.log('after update');
+    }
+    else{
+      console.log('before create');
+      // updateTodoMutation.mutate({...data, checked:true})
+      await createTodoMutation.mutateAsync({...data, checked:true})
       console.log('after create');
+    }
+    reset({id: 0, title: '', description: ''})
+    setEditing(false)
   }
 
   // NOTE: function that will be ran when "checked" checkbox is clicked. Also it is highly recommended that you use an "await deleteTodoMutation.mutateAsync(id)" along with async before
   // the function else any additional logic here might not run in the correct order. The order of "before update", "after update" and "Mutate Update" console.logs should attest to this fact.
   const handleMarkAsDoneSubmit = async (data: Todo | undefined) => {
-    if(data){
       console.log('before update');
       // updateTodoMutation.mutate({...data, checked:true})
       await updateTodoMutation.mutateAsync({...data, checked:true})
       console.log('after update');
-    }
   }
 
-  0// NOTE: function that will be ran when delete is clicked. Also it is highly recommended that you use an "await deleteTodoMutation.mutateAsync(id)" along with async before
+  // NOTE: function that will be ran when delete is clicked. Also it is highly recommended that you use an "await deleteTodoMutation.mutateAsync(id)" along with async before
   // the function else any additional logic here might not run in the correct order. The order of "before delete", "after delete" and "Mutate Delete" console.logs should attest to this fact.
   const handleDeleteTodo = async (id: number) => {
       console.log('before delete');
@@ -86,6 +118,12 @@ const CustomTodo = () => {
                   {data && data.id && (
                     <button onClick={() => handleDeleteTodo(data.id!)}>Delete</button>
                   )}
+                </div>
+                <div>
+                  {/* NOTE: Disabling the button if todo is already checked */}
+                  {!editing && <button onClick={() => startEditing({...data, editing:true})}>
+                    Edit Todo
+                  </button>}
                 </div>
               </li>
             )

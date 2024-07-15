@@ -38,6 +38,7 @@ export function useTodos(ids: (number | undefined)[] | undefined) {
       return {
         queryKey: ["todo", id],
         queryFn: () => getTodo(id!),
+        enabled: !!ids,
       };
     }),
   });
